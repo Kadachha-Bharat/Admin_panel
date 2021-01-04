@@ -9,6 +9,7 @@ import sessionRoutes from "./views/sessions/SessionRoutes";
 import formsRoutes from "./views/forms/FormsRoutes";
 
 import masterRoutes from "./views/master/masterRoutes";
+import settingRoutes from "./views/settingModule/settingRoutes";
 
 const redirectRoute = [
   {
@@ -27,6 +28,7 @@ const errorRoute = [
 const routes = [
   ...sessionRoutes,
   ...masterRoutes,
+  ...settingRoutes,
   ...dashboardRoutes,
   ...utilitiesRoutes,
   ...formsRoutes,
