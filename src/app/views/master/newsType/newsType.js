@@ -217,7 +217,7 @@ class newsType extends Component{
       <Table style={{ whiteSpace: "pre" }}>
         <TableHead>
           <TableRow>
-          <TableCell className="px-0">ID</TableCell>
+          <TableCell className="px-0">No</TableCell>
             <TableCell className="px-0">NEWS Type</TableCell>
             <TableCell className="px-0">Active/Not Active</TableCell>
             <TableCell className="px-0">Action</TableCell>
@@ -302,7 +302,8 @@ class newsType extends Component{
                 onError={(errors) => null}
               >
                 <TextValidator
-                  className="mb-16 w-300"
+                  variant="outlined"
+                  className="mb-16"
                   label="News Type"
                   onChange={this.handleChange}
                   type="text"
@@ -313,7 +314,6 @@ class newsType extends Component{
                   style={{width: "-webkit-fill-available"}}
                 />
                  <RadioGroup
-                className="mb-16"
                 value={isActive}
                 name="isActive"
                 onChange={this.handleChange}
@@ -332,7 +332,7 @@ class newsType extends Component{
                   labelPlacement="end"
                 />
               </RadioGroup>
-                <DialogActions>
+                <DialogActions className="p-0">
                 <Button onClick={this.handleClose} color="primary">
                   Cancel
                 </Button>

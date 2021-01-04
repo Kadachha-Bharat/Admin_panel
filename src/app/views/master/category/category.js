@@ -27,7 +27,10 @@ import {
   FormControlLabel,
   Radio,
   MenuItem,
-  FormControl,InputLabel, Select
+  FormControl,
+  InputLabel,
+  Select,
+  TextField,
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
@@ -47,8 +50,7 @@ class category extends Component {
     categoryToken: "",
     isActive: "active",
     type: "new",
-    serialNo: 0,
-    serialList : [1,2,3,4,5,6,7,8,9,10]
+    serialNo: 1,
   };
   componentDidMount = async () => {
     await this.categoryList();
@@ -112,7 +114,7 @@ class category extends Component {
         categoryName: data.categoryName,
         categoryToken: data.categoryToken,
         isActive: data.isActive ? "active" : "notActive",
-        serialNo : data.serialNo
+        serialNo: data.serialNo,
       });
     }
   };
@@ -124,11 +126,11 @@ class category extends Component {
       type: "new",
       categoryToken: "",
       isActive: "active",
-      serialNo : 0
+      serialNo: 1,
     });
   };
   AddCategory = async () => {
-    const { type, categoryName, isActive , serialNo} = this.state;
+    const { type, categoryName, isActive, serialNo } = this.state;
     if (type === "new") {
       if (!categoryName) {
         toastr.error("Category is required");
@@ -141,7 +143,7 @@ class category extends Component {
       let data = {
         categoryName: categoryName,
         isActive: isActive === "active" ? true : false,
-        serialNo : serialNo
+        serialNo: serialNo,
       };
       const createCategory = await addCategoryApi(data);
       if (createCategory) {
@@ -163,12 +165,18 @@ class category extends Component {
         categoryToken: "",
         type: "new",
         isActive: "active",
-        serialNo : 0
+        serialNo: 1,
       });
     }
   };
   UpdateCategory = async () => {
-    const { type, categoryName, categoryToken, isActive, serialNo } = this.state;
+    const {
+      type,
+      categoryName,
+      categoryToken,
+      isActive,
+      serialNo,
+    } = this.state;
     if (type === "edit") {
       if (!categoryName) {
         toastr.error("Catetgory is required");
@@ -182,7 +190,7 @@ class category extends Component {
         categoryName: categoryName,
         categoryToken: categoryToken,
         isActive: isActive === "active" ? true : false,
-        serialNo : serialNo
+        serialNo: serialNo,
       };
       const updateCategory = await updateCategoryApi(data);
       if (updateCategory) {
@@ -204,7 +212,7 @@ class category extends Component {
         categoryToken: "",
         type: "new",
         isActive: "active",
-        serialNo :0
+        serialNo: 1,
       });
     }
   };
@@ -222,7 +230,6 @@ class category extends Component {
       openModal,
       isActive,
       serialNo,
-      serialList
     } = this.state;
     return (
       <div className="m-sm-30">
@@ -249,8 +256,9 @@ class category extends Component {
             <Table style={{ whiteSpace: "pre" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell className="px-0">Serial No</TableCell>
+                  <TableCell className="px-0">No</TableCell>
                   <TableCell className="px-0">Category Name</TableCell>
+                  <TableCell className="px-0">Serial No</TableCell>
                   <TableCell className="px-0">Active/Not Active</TableCell>
                   <TableCell className="px-0">Action</TableCell>
                 </TableRow>
@@ -261,10 +269,15 @@ class category extends Component {
                   .map((category, index) => (
                     <TableRow key={index}>
                       <TableCell className="px-0 capitalize" align="left">
-                        {category.serialNo}
+                        {index + 1}
                       </TableCell>
                       <TableCell className="px-0 capitalize" align="left">
                         {category.categoryName}
+                      </TableCell>
+                      <TableCell className="px-0 capitalize" align="left">
+                        <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
+                          {category.serialNo}
+                        </small>
                       </TableCell>
                       <TableCell className="px-0 capitalize" align="left">
                         {category.isActive ? (
@@ -349,18 +362,20 @@ class category extends Component {
                 }
                 onError={(errors) => null}
               >
-                <FormControl style={{ width: "-webkit-fill-available"}} error={!serialNo} >
-                  <InputLabel htmlFor="grouped-select" id="serialNo">Serial No</InputLabel>
-                  <Select name="serialNo" labelId="serialNo" value={serialNo} onChange={this.handleChange}>
-                  {serialList.map((list, index) => {
-                        return (
-                          <MenuItem value={list} key={index}>
-                            {list}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+                <FormControl
+                  style={{ width: "-webkit-fill-available" }}
+                  error={!serialNo}
+                >
+                  <TextField
+                    label="Serial No"
+                    InputProps={{ inputProps: { min: "1", max: "99" } }}
+                    type="number"
+                    value={serialNo}
+                    onChange={this.handleChange}
+                    variant="outlined"
+                  />
                 </FormControl>
+                <div style={{ marginTop : "25px"}}>
                 <TextValidator
                   className="mb-16 w-300"
                   label="Category"
@@ -371,10 +386,10 @@ class category extends Component {
                   validators={["required", "minStringLength: 2"]}
                   errorMessages={["this field is required"]}
                   style={{ width: "-webkit-fill-available" }}
+                  variant="outlined"
                 />
-
+                </div>
                 <RadioGroup
-                  className="mb-16"
                   value={isActive}
                   name="isActive"
                   onChange={this.handleChange}
@@ -393,7 +408,7 @@ class category extends Component {
                     labelPlacement="end"
                   />
                 </RadioGroup>
-                <DialogActions>
+                <DialogActions className="p-0">
                   <Button onClick={this.handleClose} color="primary">
                     Cancel
                   </Button>
